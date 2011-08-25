@@ -14,20 +14,26 @@
 
 class HelloWorld : public cocos2d::CCLayer {
 public:
-    ~HelloWorld();
     HelloWorld();
+	~HelloWorld();
     
-    // returns a Scene that contains the HelloWorld as the only child
-    static cocos2d::CCScene* scene();
+	// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
+	virtual bool init();  
     
-    // adds a new sprite at a given coordinate
-    void addNewSpriteWithCoords(cocos2d::CCPoint p);
-    virtual void draw();
-    virtual void ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event);
-    void tick(cocos2d::ccTime dt);
+	// there's no 'id' in cpp, so we recommand to return the exactly class pointer
+	static cocos2d::CCScene* scene();
     
+	// implement the "static node()" method manually
+	LAYER_NODE_FUNC(HelloWorld);
+
 private:
-    b2World* world;
+    virtual void didAccelerate(cocos2d::CCAcceleration *pAccelerationValue);
+    void tick(cocos2d::ccTime delta);
+    
+    b2World *world;
+    b2Body *body;
+    cocos2d::CCSprite *ball;
+    int ptmRatio;
 };
 
 #endif // __HELLO_WORLD_H__
